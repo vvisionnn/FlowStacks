@@ -20,11 +20,14 @@ public enum Route<Screen> {
   @available(OSX, unavailable, message: "Not available on OS X.")
   case cover(Screen, withNavigation: Bool)
 
+  @available(OSX, unavailable, message: "Not available on OS X.")
+  case fullScreenSheet(Screen, withNavigation: Bool)
+
   /// The screen to be shown.
   public var screen: Screen {
     get {
       switch self {
-      case let .push(screen), let .sheet(screen, _), let .cover(screen, _):
+      case let .cover(screen, _), let .fullScreenSheet(screen, _), let .push(screen), let .sheet(screen, _):
         screen
       }
     }
@@ -38,6 +41,8 @@ public enum Route<Screen> {
         #else
           case let .cover(_, withNavigation):
             self = .cover(newValue, withNavigation: withNavigation)
+          case let .fullScreenSheet(_, withNavigation):
+            self = .fullScreenSheet(newValue, withNavigation: withNavigation)
       #endif
       }
     }
@@ -48,7 +53,9 @@ public enum Route<Screen> {
     switch self {
     case .push:
       false
-    case let .sheet(_, withNavigation), let .cover(_, withNavigation):
+    case let .cover(_, withNavigation),
+         let .fullScreenSheet(_, withNavigation),
+         let .sheet(_, withNavigation):
       withNavigation
     }
   }
@@ -58,7 +65,7 @@ public enum Route<Screen> {
     switch self {
     case .push:
       false
-    case .sheet, .cover:
+    case .cover, .sheet, .fullScreenSheet:
       true
     }
   }
@@ -76,6 +83,8 @@ public enum Route<Screen> {
       #else
         case let .cover(_, withNavigation):
           return .cover(transform(screen), withNavigation: withNavigation)
+        case let .fullScreenSheet(_, withNavigation):
+          return .fullScreenSheet(transform(screen), withNavigation: withNavigation)
     #endif
     }
   }

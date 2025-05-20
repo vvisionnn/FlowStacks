@@ -1,6 +1,7 @@
+import Presentation
 import SwiftUI
 
-struct CoverModifier<Destination: View>: ViewModifier {
+struct FullScreenSheetModifier<Destination: View>: ViewModifier {
   var isActiveBinding: Binding<Bool>
   var destination: Destination
 
@@ -14,17 +15,17 @@ struct CoverModifier<Destination: View>: ViewModifier {
         )
     #else
       content
-        .fullScreenCover(
+        .presentation(
           isPresented: isActiveBinding,
-          onDismiss: nil,
-          content: { destination.environment(\.parentNavigationStackType, nil) }
+          transition: .interactiveFullSheet,
+          destination: { destination.environment(\.parentNavigationStackType, nil) }
         )
     #endif
   }
 }
 
 extension View {
-  func cover(isActive: Binding<Bool>, destination: some View) -> some View {
-    modifier(CoverModifier(isActiveBinding: isActive, destination: destination))
+  func fullScreenSheet(isActive: Binding<Bool>, destination: some View) -> some View {
+    modifier(FullScreenSheetModifier(isActiveBinding: isActive, destination: destination))
   }
 }

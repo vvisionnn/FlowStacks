@@ -15,6 +15,9 @@ public enum RouteStyle: Hashable, Codable, Sendable {
   @available(OSX, unavailable, message: "Not available on OS X.")
   case cover(withNavigation: Bool)
 
+  @available(OSX, unavailable, message: "Not available on OS X.")
+  case fullScreenSheet(withNavigation: Bool)
+
   /// A sheet presentation.
   public static let sheet = RouteStyle.sheet(withNavigation: false)
 
@@ -27,7 +30,7 @@ public enum RouteStyle: Hashable, Codable, Sendable {
     switch self {
     case .sheet:
       true
-    case .cover, .push:
+    case .cover, .fullScreenSheet, .push:
       false
     }
   }
@@ -37,7 +40,7 @@ public enum RouteStyle: Hashable, Codable, Sendable {
     switch self {
     case .cover:
       true
-    case .sheet, .push:
+    case .fullScreenSheet, .push, .sheet:
       false
     }
   }
@@ -47,7 +50,16 @@ public enum RouteStyle: Hashable, Codable, Sendable {
     switch self {
     case .push:
       true
-    case .sheet, .cover:
+    case .cover, .fullScreenSheet, .sheet:
+      false
+    }
+  }
+
+  public var isFullScreenSheet: Bool {
+    switch self {
+    case .fullScreenSheet:
+      true
+    case .cover, .push, .sheet:
       false
     }
   }
@@ -66,6 +78,8 @@ public extension Route {
       #else
         case let .cover(_, withNavigation):
           return .cover(withNavigation: withNavigation)
+        case let .fullScreenSheet(_, withNavigation):
+          return .fullScreenSheet(withNavigation: withNavigation)
     #endif
     }
   }
@@ -84,6 +98,8 @@ public extension Route {
       #else
         case let .cover(withNavigation):
           self = .cover(screen, withNavigation: withNavigation)
+        case let .fullScreenSheet(withNavigation):
+          self = .fullScreenSheet(screen, withNavigation: withNavigation)
     #endif
     }
   }

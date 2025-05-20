@@ -58,6 +58,9 @@ private struct NumberView: View {
   var body: some View {
     VStack(spacing: 8) {
       SimpleStepper(number: $number)
+      Button("Present Double (full screen sheet)") {
+        navigator.presentFullScreenSheet(number * 2, withNavigation: true)
+      }
       Button("Present Double (cover)") {
         navigator.presentCover(number * 2, withNavigation: true)
       }

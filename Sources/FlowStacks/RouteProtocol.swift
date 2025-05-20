@@ -11,6 +11,7 @@ public protocol RouteProtocol {
   // Full-screen cover unavailable.
   #else
     static func cover(_ screen: Screen, withNavigation: Bool) -> Self
+    static func fullScreenSheet(_ screen: Screen, withNavigation: Bool) -> Self
   #endif
   var screen: Screen { get set }
   var withNavigation: Bool { get }

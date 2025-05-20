@@ -9,7 +9,9 @@ public extension Array where Element: RouteProtocol {
       switch route.style {
       case .push:
         continue
-      case let .cover(withNavigation), let .sheet(withNavigation):
+      case let .cover(withNavigation),
+           let .fullScreenSheet(withNavigation),
+           let .sheet(withNavigation):
         return withNavigation
       }
     }
@@ -46,6 +48,11 @@ public extension Array where Element: RouteProtocol {
     @available(OSX, unavailable, message: "Not available on OS X.")
     mutating func presentCover(_ screen: Element.Screen, withNavigation: Bool = false) {
       append(.cover(screen, withNavigation: withNavigation))
+    }
+
+    @available(OSX, unavailable, message: "Not available on OS X.")
+    mutating func presentFullScreenSheet(_ screen: Element.Screen, withNavigation: Bool = false) {
+      append(.fullScreenSheet(screen, withNavigation: withNavigation))
     }
   #endif
 }

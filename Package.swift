@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "FlowStacks",
   platforms: [
-    .iOS(.v14), .watchOS(.v7), .macOS(.v11), .tvOS(.v14),
+    .iOS(.v16), .watchOS(.v9), .macOS(.v13), .tvOS(.v16),
   ],
   products: [
     .library(
@@ -13,11 +13,19 @@ let package = Package(
       targets: ["FlowStacks"]
     ),
   ],
-  dependencies: [],
+  dependencies: [
+    .package(url: "https://github.com/vvisionnn/swiftui-presentation", from: "0.3.1"),
+  ],
   targets: [
     .target(
       name: "FlowStacks",
-      dependencies: []
+      dependencies: [
+        .product(
+          name: "Presentation",
+          package: "swiftui-presentation",
+          condition: .when(platforms: [.iOS])
+        ),
+      ]
     ),
     .testTarget(
       name: "FlowStacksTests",

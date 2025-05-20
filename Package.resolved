@@ -1,0 +1,15 @@
+{
+  "originHash" : "b137c731c5c2c97ae68a45f8e0af4a67d98bd637aceb486dacf510463c5cc2f0",
+  "pins" : [
+    {
+      "identity" : "swiftui-presentation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vvisionnn/swiftui-presentation",
+      "state" : {
+        "revision" : "b323cfdcb27878cc02b07519c386ceac2b14a6ca",
+        "version" : "0.3.1"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -31,6 +31,11 @@ public extension FlowNavigator {
     func presentCover(_ screen: Screen, withNavigation: Bool = false) {
       routes.presentCover(screen, withNavigation: withNavigation)
     }
+
+    @available(OSX, unavailable, message: "Not available on OS X.")
+    func presentFullScreenSheet(_ screen: Screen, withNavigation: Bool = false) {
+      routes.presentFullScreenSheet(screen, withNavigation: withNavigation)
+    }
   #endif
 }
 
@@ -90,7 +95,7 @@ public extension FlowNavigator where Screen == AnyHashable {
   /// - Parameter type: The type of the screen to go back to.
   /// - Returns: A `Bool` indicating whether a screen was found.
   @discardableResult
-  func goBackTo<T: Hashable>(type: T.Type) -> Bool {
+  func goBackTo<T: Hashable>(type _: T.Type) -> Bool {
     goBackTo(where: { $0.screen is T })
   }
 }
@@ -253,7 +258,7 @@ public extension FlowNavigator where Screen == AnyHashable {
   /// - Parameter type: The type of the screen to go back to.
   /// - Returns: A `Bool` indicating whether a screen was found.
   @discardableResult
-  func popTo<T: Hashable>(type: T.Type) -> Bool {
+  func popTo<T: Hashable>(type _: T.Type) -> Bool {
     popTo(where: { $0.screen is T })
   }
 }

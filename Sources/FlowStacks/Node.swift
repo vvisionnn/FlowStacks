@@ -15,7 +15,13 @@ struct Node<Screen: Hashable, Modifier: ViewModifier, ScreenModifier: ViewModifi
 
   @State var isAppeared = false
 
-  init(allRoutes: Binding<[Route<Screen>]>, truncateToIndex: @escaping (Int) -> Void, index: Int, navigationViewModifier: Modifier, screenModifier: ScreenModifier) {
+  init(
+    allRoutes: Binding<[Route<Screen>]>,
+    truncateToIndex: @escaping (Int) -> Void,
+    index: Int,
+    navigationViewModifier: Modifier,
+    screenModifier: ScreenModifier
+  ) {
     _allRoutes = allRoutes
     self.truncateToIndex = truncateToIndex
     self.index = index
@@ -26,7 +32,9 @@ struct Node<Screen: Hashable, Modifier: ViewModifier, ScreenModifier: ViewModifi
 
   private var isActiveBinding: Binding<Bool> {
     Binding(
-      get: { allRoutes.count > index + 1 },
+      get: {
+        allRoutes.count > index + 1
+      },
       set: { isShowing in
         guard !isShowing else { return }
         guard allRoutes.count > index + 1 else { return }
@@ -37,7 +45,13 @@ struct Node<Screen: Hashable, Modifier: ViewModifier, ScreenModifier: ViewModifi
   }
 
   var next: some View {
-    Node(allRoutes: $allRoutes, truncateToIndex: truncateToIndex, index: index + 1, navigationViewModifier: navigationViewModifier, screenModifier: screenModifier)
+    Node(
+      allRoutes: $allRoutes,
+      truncateToIndex: truncateToIndex,
+      index: index + 1,
+      navigationViewModifier: navigationViewModifier,
+      screenModifier: screenModifier
+    )
   }
 
   var nextRouteStyle: RouteStyle? {
