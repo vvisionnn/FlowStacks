@@ -20,3 +20,6 @@ xcuserdata/
 
 ### macOS
 .DS_Store
+
+Derived/
+FlowStacks.xcodeproj/

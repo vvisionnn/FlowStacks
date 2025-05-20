@@ -25,6 +25,9 @@ public enum RouteStyle: Hashable, Codable, Sendable {
   @available(OSX, unavailable, message: "Not available on OS X.")
   public static let cover = RouteStyle.cover(withNavigation: false)
 
+	@available(OSX, unavailable, message: "Not available on OS X.")
+	public static let fullScreenSheet = RouteStyle.fullScreenSheet(withNavigation: false)
+
   /// Whether the route style is `sheet`.
   public var isSheet: Bool {
     switch self {
