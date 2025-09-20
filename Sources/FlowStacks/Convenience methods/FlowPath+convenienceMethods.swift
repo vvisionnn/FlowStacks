@@ -169,7 +169,7 @@ public extension FlowPath {
   mutating func popTo(_ screen: AnyHashable) -> Bool {
     routes.popTo(screen)
   }
-
+  
   /// Pops to the topmost (most recently shown) screen in the stack
   /// whose type matches the given type. If no screens satisfy the condition,
   /// the routes array will be unchanged. Only screens that have been pushed will
@@ -177,7 +177,7 @@ public extension FlowPath {
   /// - Parameter type: The type of the screen to go back to.
   /// - Returns: A `Bool` indicating whether a screen was found.
   @discardableResult
-  mutating func popTo<T: Hashable>(type _: T.Type) -> Bool {
+  mutating func popTo<T: Hashable>(type: T.Type) -> Bool {
     popTo(where: { $0.screen is T })
   }
 }

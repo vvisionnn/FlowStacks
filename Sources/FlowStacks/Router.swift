@@ -9,12 +9,7 @@ struct Router<Screen: Hashable, RootView: View, NavigationViewModifier: ViewModi
 
   @Binding var screens: [Route<Screen>]
 
-  init(
-    rootView: RootView,
-    navigationViewModifier: NavigationViewModifier,
-    screenModifier: ScreenModifier,
-    screens: Binding<[Route<Screen>]>
-  ) {
+  init(rootView: RootView, navigationViewModifier: NavigationViewModifier, screenModifier: ScreenModifier, screens: Binding<[Route<Screen>]>) {
     self.rootView = rootView
     self.navigationViewModifier = navigationViewModifier
     self.screenModifier = screenModifier
@@ -22,13 +17,7 @@ struct Router<Screen: Hashable, RootView: View, NavigationViewModifier: ViewModi
   }
 
   var pushedScreens: some View {
-    Node(
-      allRoutes: $screens,
-      truncateToIndex: { screens = Array(screens.prefix($0)) },
-      index: 0,
-      navigationViewModifier: navigationViewModifier,
-      screenModifier: screenModifier
-    )
+    Node(allRoutes: $screens, truncateToIndex: { screens = Array(screens.prefix($0)) }, index: 0, navigationViewModifier: navigationViewModifier, screenModifier: screenModifier)
   }
 
   private var isActiveBinding: Binding<Bool> {

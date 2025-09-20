@@ -12,7 +12,6 @@ enum Deeplink {
         return nil
       }
       self = .numberCoordinator(numberDeeplink)
-
     case "vm-numbers":
       guard let numberDeeplink = ViewModelTabDeeplink(pathComponents: url.pathComponents.dropFirst()) else {
         return nil

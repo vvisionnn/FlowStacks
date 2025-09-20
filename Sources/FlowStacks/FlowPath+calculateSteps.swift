@@ -64,10 +64,11 @@ extension FlowPath {
   ///   - end: The goal state.
   /// - Returns: A series of state updates from the start to end.
   public static func calculateSteps<Screen>(from start: [Route<Screen>], to end: [Route<Screen>]) -> [[Route<Screen>]] {
-    let allowMultipleDismissalsInOne = if #available(iOS 17.0, *) {
-      true
+    let allowMultipleDismissalsInOne: Bool
+    if #available(iOS 17.0, *) {
+      allowMultipleDismissalsInOne = true
     } else {
-      false
+      allowMultipleDismissalsInOne = false
     }
     return calculateSteps(from: start, to: end, allowMultipleDismissalsInOne: allowMultipleDismissalsInOne)
   }
