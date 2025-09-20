@@ -92,6 +92,8 @@ public enum Route<Screen> {
 
 extension Route: Equatable where Screen: Equatable {}
 
+extension Route: Hashable where Screen: Hashable {}
+
 extension Route: Codable where Screen: Codable {}
 
 extension Route where Screen: Hashable {
@@ -100,5 +102,16 @@ extension Route where Screen: Hashable {
       return anyHashableSelf
     }
     return map { $0 }
+  }
+}
+
+extension Hashable {
+  var erasedToAnyHashable: AnyHashable {
+    get {
+      return self
+    }
+    set {
+      self = newValue as! Self
+    }
   }
 }

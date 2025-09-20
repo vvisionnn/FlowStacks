@@ -85,11 +85,12 @@ private struct NumberView: View {
           .accessibilityIdentifier("Go back to root from \(number)")
       }
       if let routeStyle, let routeIndex {
-        Text("\(routeStyle) (\(routeIndex))")
+        Text("\(routeStyle.description) (\(routeIndex))")
           .font(.footnote).foregroundColor(.gray)
       }
     }
     .padding()
+    .background(Color.white)
     .flowDestination(item: $colorShown, style: .sheet(withNavigation: true)) { color in
       Text(String(describing: color)).foregroundColor(color)
         .navigationTitle("Color")
@@ -133,6 +134,19 @@ struct AccentColorModifier: ViewModifier {
       content.tint(color)
     } else {
       content.accentColor(color)
+    }
+  }
+}
+
+private extension RouteStyle {
+  var description: String {
+    switch self {
+    case .push:
+      return "push"
+    case let .cover(withNavigation):
+      return "cover" + (withNavigation ? "WithNavigation" : "")
+    case let .sheet(withNavigation):
+      return "sheet" + (withNavigation ? "WithNavigation" : "")
     }
   }
 }

@@ -1,5 +1,11 @@
 import Foundation
 
+#if FOR_TCACOORDINATORS
+  let rootIndex = 0
+#else
+  let rootIndex = -1
+#endif
+
 public extension Array where Element: RouteProtocol {
   /// Whether the Array of Routes is able to push new screens. If it is not possible to determine,
   /// `nil` will be returned, e.g. if there is no `NavigationView` in this routes stack but it's possible
@@ -35,7 +41,6 @@ public extension Array where Element: RouteProtocol {
 
   /// Presents a new screen via a sheet presentation.
   /// - Parameter screen: The screen to push.
-  /// - Parameter onDismiss: A closure to be invoked when the screen is dismissed.
   mutating func presentSheet(_ screen: Element.Screen, withNavigation: Bool = false) {
     append(.sheet(screen, withNavigation: withNavigation))
   }
@@ -44,7 +49,6 @@ public extension Array where Element: RouteProtocol {
   #else
     /// Presents a new screen via a full-screen cover presentation.
     /// - Parameter screen: The screen to push.
-    /// - Parameter onDismiss: A closure to be invoked when the screen is dismissed.
     @available(OSX, unavailable, message: "Not available on OS X.")
     mutating func presentCover(_ screen: Element.Screen, withNavigation: Bool = false) {
       append(.cover(screen, withNavigation: withNavigation))
@@ -63,21 +67,21 @@ public extension Array where Element: RouteProtocol {
   /// Returns true if it's possible to go back the given number of screens.
   /// - Parameter count: The number of screens to go back. Defaults to 1.
   func canGoBack(_ count: Int = 1) -> Bool {
-    self.count - count >= 0 && count >= 0
+    self.count - count > rootIndex && count >= 0
   }
 
   /// Goes back a given number of screens off the stack
   /// - Parameter count: The number of screens to go back. Defaults to 1.
   mutating func goBack(_ count: Int = 1) {
     assert(
-      self.count - count >= 0,
+      self.count - count > rootIndex,
       "Can't go back\(count == 1 ? "" : " \(count) screens") - the screen count is \(self.count)"
     )
     assert(
       count >= 0,
       "Can't go back \(count) screens - count must be positive"
     )
-    guard self.count - count >= 0, count >= 0 else { return }
+    guard self.count - count > rootIndex, count >= 0 else { return }
     removeLast(count)
   }
 
@@ -91,7 +95,7 @@ public extension Array where Element: RouteProtocol {
   /// Goes back to the root screen (index 0). The resulting array's count will be 0.
   mutating func goBackToRoot() {
     guard !isEmpty else { return }
-    goBackTo(index: -1)
+    goBackTo(index: rootIndex)
   }
 
   /// Goes back to the topmost (most recently shown) screen in the stack
@@ -172,7 +176,7 @@ public extension Array where Element: RouteProtocol {
   /// be popped.
   /// - Parameter count: The number of screens to go back. Defaults to 1.
   mutating func pop(_ count: Int = 1) {
-    assert(count <= self.count)
+    assert(self.count - count > rootIndex)
     assert(suffix(count).allSatisfy { $0.style == .push })
     goBack(count)
   }
@@ -190,7 +194,7 @@ public extension Array where Element: RouteProtocol {
   /// will be 0. Only screens that have been pushed will
   /// be popped.
   mutating func popToRoot() {
-    popTo(index: -1)
+    popTo(index: rootIndex)
   }
 
   /// Pops all pushed screens in the current navigation stack only, without dismissing any screens.
@@ -287,13 +291,7 @@ public extension Array where Element: RouteProtocol {
     assert(count >= 0)
     var index = endIndex - 1
     var dismissed = 0
-    while dismissed < count, indices.contains(index) {
-      assert(
-        index >= 0,
-        "Can't dismiss\(count == 1 ? "" : " \(count) screens") - the number of presented screens is \(dismissed)"
-      )
-      guard index >= 0 else { return }
-
+    while dismissed < count, index > rootIndex {
       if self[index].isPresented {
         dismissed += 1
       }
@@ -305,7 +303,7 @@ public extension Array where Element: RouteProtocol {
   /// Dismisses all presented sheets and modals, without popping any pushed screens in the bottommost
   /// presentation layer.
   mutating func dismissAll() {
-    let count = filter(\.isPresented).count
+    let count = self[(rootIndex + 1)...].filter(\.isPresented).count
     guard count > 0 else { return }
     dismiss(count: count)
   }

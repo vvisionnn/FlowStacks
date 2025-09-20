@@ -12,6 +12,10 @@ let package = Package(
       name: "FlowStacks",
       targets: ["FlowStacks"]
     ),
+    .library(
+      name: "FlowStacksForTCACoordinators",
+      targets: ["FlowStacksForTCACoordinators"]
+    ),
   ],
   dependencies: [
     .package(url: "https://github.com/vvisionnn/swiftui-presentation", from: "0.3.3"),
@@ -31,6 +35,13 @@ let package = Package(
           package: "swiftui-presentation",
           condition: .when(platforms: [.iOS])
         ),
+      ]
+    ),
+    .target(
+      name: "FlowStacksForTCACoordinators",
+      dependencies: ["FlowStacks"],
+      swiftSettings: [
+        .define("FOR_TCACOORDINATORS"),
       ]
     ),
     .testTarget(
