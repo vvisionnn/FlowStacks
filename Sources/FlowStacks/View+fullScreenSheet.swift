@@ -1,4 +1,6 @@
+#if os(iOS)
 import Presentation
+#endif
 import SwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 
@@ -44,6 +46,7 @@ extension View {
 	}
 }
 
+#if os(iOS)
 extension View {
 	@ViewBuilder
 	fileprivate func wantsFullScreenSheet() -> some View {
@@ -54,3 +57,4 @@ extension View {
 		}
 	}
 }
+#endif
