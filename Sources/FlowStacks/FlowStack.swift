@@ -57,8 +57,12 @@ public struct FlowStack<Root: View, Data: Hashable, NavigationViewModifier: View
     if deferToParentFlowStack {
       root
     } else {
-      if parentFlowStackDataType != nil, !deferToParentFlowStack, routeStyle == .push, path.routes.first?.style == .push {
-        let _ = assertionFailure("Unable to push from a child FlowStack onto a parent's navigation stack when using NavigationStack and the child manages its own state.")
+      if parentNavigationStackType == .navigationStack, parentFlowStackDataType != nil, !deferToParentFlowStack, routeStyle == .push, path.routes.first?.style == .push {
+        let _ = assertionFailure("""
+        Unsupported nesting of FlowStacks. It is not possible to push from a child FlowStack when the navigation stack \
+        is owned by the parent, where the child is also managing its own state. onto a parent's navigation stack when \
+        using NavigationStack and the child manages its own state.
+        """)
       }
       router
         .modifier(screenModifier)

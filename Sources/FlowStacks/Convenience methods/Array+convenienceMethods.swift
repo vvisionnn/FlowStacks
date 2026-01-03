@@ -1,10 +1,8 @@
 import Foundation
 
-#if FOR_TCACOORDINATORS
-  let rootIndex = 0
-#else
-  let rootIndex = -1
-#endif
+// TCACoordinators sets this to true.
+@_spi(Private) public var isWithinTCACoordinators = false
+private var rootIndex: Int { isWithinTCACoordinators ? 0 : -1 }
 
 public extension Array where Element: RouteProtocol {
   /// Whether the Array of Routes is able to push new screens. If it is not possible to determine,
@@ -18,6 +16,12 @@ public extension Array where Element: RouteProtocol {
       case let .cover(withNavigation),
            let .fullScreenSheet(withNavigation),
            let .sheet(withNavigation):
+        if isWithinTCACoordinators {
+          // NOTE: TCACoordinators includes the root screen in its Array, which may have `withNavigation` set to false.
+          // However, in nested coordinators, it's possible that the parent includes a navigation wrapper, and pushing
+          // is possible even if `withNavigation` is false.
+          return withNavigation ? true : nil
+        }
         return withNavigation
       }
     }
@@ -291,7 +295,7 @@ public extension Array where Element: RouteProtocol {
     assert(count >= 0)
     var index = endIndex - 1
     var dismissed = 0
-    while dismissed < count, index > rootIndex {
+    while dismissed < count, index + 1 > rootIndex {
       if self[index].isPresented {
         dismissed += 1
       }
