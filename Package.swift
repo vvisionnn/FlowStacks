@@ -15,7 +15,7 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/vvisionnn/swiftui-presentation", from: "0.3.3"),
-    .package(url: "https://github.com/siteline/swiftui-introspect", "1.3.0"..<"27.0.0"),
+    .package(url: "https://github.com/siteline/swiftui-introspect", "1.3.0"..<"28.0.0"),
   ],
   targets: [
     .target(
